@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {createStore, combineReducers} from 'redux';
+import {createStore, combineReducers, applyMiddleware} from 'redux';
 import {Provider} from 'react-redux';
 import './index.css';
 import App from './App';
@@ -28,12 +28,20 @@ const reducer = (state = {num: 0, number: {value: 0}}, action) => {
     default:
       return state;
   }
-}
+};
+
+const middleware = ({dispatch, getState}) => next => (action) => {
+  console.log('middleware');
+  return next(action);
+};
 
 const store = createStore(
   combineReducers({
     counter: reducer
-  })
+  }),
+  applyMiddleware(
+    middleware
+  )
 );
 
 ReactDOM.render((
