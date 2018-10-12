@@ -1,10 +1,46 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {createStore, combineReducers} from 'redux';
+import {Provider} from 'react-redux';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const reducer = (state = {num: 0, number: {value: 0}}, action) => {
+
+  switch (action.type) {
+    case 'increase':
+      return {
+        ...state,
+        num: state.num + 1,
+        number: {
+          value: state.number.value + 1,
+        }
+      };
+    case 'decrease':
+      return {
+        ...state,
+        num: state.num - 1,
+        number: {
+          value: state.number.value - 1,
+        }
+      };
+    default:
+      return state;
+  }
+}
+
+const store = createStore(
+  combineReducers({
+    counter: reducer
+  })
+);
+
+ReactDOM.render((
+  <Provider store={store}>
+    <App />
+  </Provider>
+), document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
